@@ -28,9 +28,9 @@ For save at /home/youruser/public_html/somesubdomainfolder/ leave blank
 $GLOBALS['IMAGES_DIR'] = '';
 ```
 
-Don't forget to set the permissions on the folder images or somesubdomainfolder. It might be 0777.
-Remeber to do not set to 0777 to the manager folder.
+Set permissions of images or somesubdomainfolder.
+Remember to not set 0777 the manager folder.
 
 If you are in windows just use '\' instead '/' and place the unit.
 
-The folder tests contain html forms for checking if everything is ok. Just access it from your server. The folder must be at the same root of manager.
+The folder tests contain html forms for checking if everything is ok. Just access it from your server. The folder must be at same root of manager.
