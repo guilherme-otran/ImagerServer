@@ -2,8 +2,9 @@
   <head><title>Post tester</title></head>
   <body>
     <form enctype='multipart/form-data' method='post' action='../manager/post.php'>
-
-      <input type='text' name='auth' />
+      Find the returned token <a href='../manager/auth.php' target='_blank'>HERE</a>
+      <br />
+      md5(Returned token . YOUR_AUTH_CODE):<input type='text' name='auth' />
 
       <input type='file' name='file' />
       <input type='text' name='collection' />
