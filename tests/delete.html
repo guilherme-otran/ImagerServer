@@ -1,0 +1,16 @@
+<html>
+  <head><title>Delete tester</title></head>
+  <body>
+    <form enctype='multipart/form-data' method='post' action='../manager/delete.php'>
+      Find the returned token <a href='../manager/auth.php' target='_blank'>HERE</a>
+      <br />
+      md5(Returned token . YOUR_AUTH_CODE): <input type='text' name='auth' />
+
+      Collection:<input type='text' name='collection' />
+      Album:<input type='text' name='album' />
+      File ID:<input type='text' name='file_id' />
+
+      <input type='submit' />
+    </form>
+  </boby>
+</html>
