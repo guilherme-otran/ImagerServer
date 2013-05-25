@@ -23,6 +23,9 @@ try {
     if (!mkdir($GLOBALS['ImagePath'] . $destination, 0777, true)) {
       throw new Exception("Cannot makedir", 1);
     }
+    $new = true;
+  } else {
+    $new = false;
   }
 
   foreach ($sizes as $key => $size) {
@@ -46,7 +49,11 @@ try {
   );
 
   if (sizeof($files) > 0) {
-    header("Status: 201 Created");
+    if ($new) {
+      header("Status: 201 Created");
+    } else {
+      header("Status: 200 OK");
+    }
     echo json_encode($result);
   } else {
     header("Status: 400 Bad Request");
