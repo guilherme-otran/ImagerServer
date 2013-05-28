@@ -30,13 +30,13 @@
   }
 
   if (! (
-    isset($_POST['file']) &&
-    is_string($_POST['file']) &&
-    (strlen($_POST['file']) > 0) &&
-    (!preg_match("/[^a-z0-9\-]/i", $_POST['album']))
+    isset($_POST['file_id']) &&
+    is_string($_POST['file_id']) &&
+    (strlen($_POST['file_id']) > 0) &&
+    (!preg_match("/[^a-z0-9\-]/i", $_POST['file_id']))
   )) {
     header("Status: 400 Bad Request");
-    die("Invalid file.");
+    die("Invalid file_id.");
   }
 
 ?>
