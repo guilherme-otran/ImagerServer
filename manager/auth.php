@@ -22,12 +22,13 @@
 
   $_SESSION['key'] = md5(uniqid(rand(), true));
 
-  if (defined('INITIALIZED')) {
-    header("Status: 401 Unauthorized");
-    exit;
-  }
 
   if (!$authenticated) {
+    if (defined('INITIALIZED')) {
+      header("Status: 401 Unauthorized");
+      exit;
+    }
+
     die($_SESSION['key']);
   }
 ?>
