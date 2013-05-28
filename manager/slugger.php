@@ -1,4 +1,9 @@
 <?php
+  if (!defined('INITIALIZED')) {
+    header("Status: 404 Not Found");
+    exit;
+  }
+
 /***
  * Função para remover acentos de uma string
  *

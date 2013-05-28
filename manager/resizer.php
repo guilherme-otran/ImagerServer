@@ -1,4 +1,10 @@
 <?php
+
+if (!defined('INITIALIZED')) {
+header("Status: 404 Not Found");
+exit;
+}
+
 function ResizeImage($source, $destination, $size)
 {
 
