@@ -1,29 +1,65 @@
 <html>
-  <head><title>Post tester</title></head>
+  <head>
+    <title>Post tester</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="md5-min.js"></script>
+    <script>
+      token = "";
+
+      function process_auth() {
+        var YOUR_AUTH_CODE = $('#auth_code').attr("value");
+
+        $('#auth').attr('value', hex_md5(token + YOUR_AUTH_CODE));
+
+      }
+
+      jQuery(function($){
+        $.ajax({
+          url: "../manager/auth.php",
+          processData: false,
+
+          success: function(data) {
+            token = data;
+            $('#formsubmit').removeAttr("disabled");
+            $(".auth-wait").remove();
+          }
+        });
+
+        $('form#form').on('submit', function(){
+          process_auth();
+        });
+      });
+
+    </script>
+  </head>
   <body>
-    <form enctype='multipart/form-data' method='post' action='../manager/post.php'>
-      Find the returned token <a href='../manager/auth.php' target='_blank'>HERE</a>
-      <br />
-      md5(Returned token . YOUR_AUTH_CODE):<input type='text' name='auth' />
+    <h2> Check this page source! </h2>
+    <h5> If you clicked back button refresh this page.</h5>
+
+    YOUR_AUTH_CODE: <input type='text' id='auth_code' value=''/>
+    <form id='form' enctype='multipart/form-data' method='post' action='../manager/post.php'>
+
+      <input type='hidden' name='auth' id='auth' value=''/>
 
       <input type='file' name='file' />
-      <input type='text' name='collection' />
-      <input type='text' name='album' />
+      Collection: <input type='text' name='collection' /> <br />
+      Album:      <input type='text' name='album' />      <br />
 
       <!-- width = 100px -->
-      <input type='text' name='sizes[home][width]'  value='100' />
+      <input type='hidden' name='sizes[home][width]'  value='100' />
 
       <!-- must be in 100x70 -->
-      <input type='text' name='sizes[small][width]'  value='100' />
-      <input type='text' name='sizes[small][heigth]' value='70' />
+      <input type='hidden' name='sizes[small][width]'  value='100' />
+      <input type='hidden' name='sizes[small][heigth]' value='70' />
 
       <!-- heigth = 200 -->
-      <input type='text' name='sizes[gallery][height]' value='200' />
+      <input type='hidden' name='sizes[gallery][height]' value='200' />
 
       <!-- no resize -->
-      <input type='text' name='sizes[original]' value='original' />
+      <input type='hidden' name='sizes[original]' value='original' />
 
-      <input type='submit' />
+      <div class='auth-wait'> Getting authentication code </div>
+      <input type='submit' id='formsubmit' disabled='disabled'/>
     </form>
   </boby>
 </html>
