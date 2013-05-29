@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Post tester</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="2.0.0-crypto-md5.js"></script>
+    <script type="text/javascript" src="2.0.0-hmac-min.js"></script>
+    <script>
+      jQuery(function($){
+
+        function process_auth() {
+          var YOUR_AUTH_CODE = $('#auth_code').val();
+          var ROUNDED = Math.round(Date.now() / (2 * 60 * 1000)) * 2 * 60;
+          var KEY = Crypto.MD5(YOUR_AUTH_CODE + ROUNDED);
+          var valor = Crypto.HMAC(Crypto.MD5, '[]', KEY);
+          $('#auth').attr('value', valor);
+        }
+
+        $('form#form').on('submit', function(){
+          process_auth();
+        });
+
+      })
+
+    </script>
+  </head>
+  <body>
+    YOUR_AUTH_CODE: <input type='text' id='auth_code' value='' />
+
+    <form id='form' enctype='multipart/form-data' method='post' action='../manager/auth.php'>
+
+      <input type='hidden' name='auth' id='auth' value=''/>
+      <input type='submit' />
+    </form>
+  </body>
+</html>

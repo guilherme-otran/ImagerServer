@@ -1,5 +1,5 @@
 <?php
-  session_start();
+  function getKey() {
 
   // You should create one!
   // This is the same that you set at gem initializer:
@@ -11,24 +11,42 @@
   // DO NOT USE A BLANK VALUE!
   // Random one yourself or use: https://www.random.org/
   //
-  $YOUR_AUTH_CODE = '';
+    $YOUR_AUTH_CODE = '';
 
-  $authenticated = false;
 
-  if (isset($_POST['auth']) && isset($_SESSION['key']))
-  {
-    $authenticated = md5($_SESSION['key'] . $YOUR_AUTH_CODE) === $_POST['auth'];
+    $delta_time = 2 * 60; // 2 Minutes
+
+    //date_default_timezone_set("UTC");
+    $seconds = time();
+    $rounded_seconds = round($seconds / ($delta_time)) * ($delta_time);
+
+    return md5($YOUR_AUTH_CODE . $rounded_seconds);
+
   }
 
-  $_SESSION['key'] = md5(uniqid(rand(), true));
+  $posted = $_POST;
 
+  if ( isset($posted['auth']) && is_string($posted['auth']) ) {
+    $auth = $posted['auth'];
+    unset($posted['auth']);
+  } else {
+    $auth = '';
+  }
+
+  if (isset($file) && $file) {
+    $data_confirm = md5_file($file['tmp_name']);
+  } else {
+    $data_confirm = '';
+  }
+
+  $data_confirm .= json_encode($posted);
+
+  $auth_check = hash_hmac('md5', $data_confirm, getKey());
+
+  $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
-    if (defined('INITIALIZED')) {
-      header("Status: 401 Unauthorized");
-      exit;
-    }
-
-    die($_SESSION['key']);
+    header("Status: 401 Unauthorized");
+    exit("Auth failed");
   }
 ?>
