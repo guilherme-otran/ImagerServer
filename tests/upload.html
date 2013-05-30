@@ -11,7 +11,6 @@
           var YOUR_AUTH_CODE = $('#auth_code').val();
 
           var data = $("form#form").serialize();
-          alert(data);
           var valor = Crypto.HMAC(Crypto.MD5, data, YOUR_AUTH_CODE);
 
           auth_elm = $("<input type='hidden' name='auth' id='auth' value='" + valor + "'/>");

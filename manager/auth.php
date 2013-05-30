@@ -33,15 +33,14 @@
   }
   unset($file);
 
-  //$data_confirm .= json_encode($posted);
   $data_confirm = http_build_query($posted);
-  $auth_check = hash_hmac('md5', $data_confirm, $YOUR_AUTH_CODE);
+  $auth_check   = hash_hmac('md5', $data_confirm, $YOUR_AUTH_CODE);
 
   $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
     usleep(rand(1, 1000));
     header("Status: 401 Unauthorized");
-    exit("Auth failed");
+    exit("Auth failed.");
   }
 ?>

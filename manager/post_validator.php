@@ -70,7 +70,6 @@
 
   // The file name should have a extension
   $file_id = utf8_decode($file['name']);
-  echo $file_id;
   $i = stripos($file_id, '.');
   if ($i === false) {
     header("Status: 400 Bad Request");
