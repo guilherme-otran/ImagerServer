@@ -9,9 +9,7 @@
 
         function process_auth() {
           var YOUR_AUTH_CODE = $('#auth_code').val();
-          var ROUNDED = Math.round(Date.now() / (2 * 60 * 1000)) * 2 * 60;
-          var KEY = Crypto.MD5(YOUR_AUTH_CODE + ROUNDED);
-          var valor = Crypto.HMAC(Crypto.MD5, '', KEY);
+          var valor = Crypto.HMAC(Crypto.MD5, '', YOUR_AUTH_CODE);
           $('#auth').attr('value', valor);
         }
 

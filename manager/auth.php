@@ -1,5 +1,4 @@
 <?php
-  function getKey() {
 
   // You should create one!
   // This is the same that you set at gem initializer:
@@ -11,18 +10,7 @@
   // DO NOT USE A BLANK VALUE!
   // Random one yourself or use: https://www.random.org/
   //
-    $YOUR_AUTH_CODE = '';
-
-
-    $delta_time = 2 * 60; // 2 Minutes
-
-    //date_default_timezone_set("UTC");
-    $seconds = time();
-    $rounded_seconds = round($seconds / ($delta_time)) * ($delta_time);
-
-    return md5($YOUR_AUTH_CODE . $rounded_seconds);
-
-  }
+  $YOUR_AUTH_CODE = '';
 
   $posted = $_POST;
 
@@ -34,7 +22,10 @@
   }
 
   if (isset($file) && $file) {
-    $data_confirm = md5_file($file['tmp_name']) . '&';
+    $data_confirm  = md5_file($file['tmp_name']);
+    $data_confirm .= sha1_file($file['tmp_name']);
+
+    $data_confirm .= http_build_query($file['name']);
   } else {
     $data_confirm = '';
   }
@@ -42,11 +33,12 @@
   //$data_confirm .= json_encode($posted);
   $data_confirm .= http_build_query($posted);
   echo($data_confirm);
-  $auth_check = hash_hmac('md5', $data_confirm, getKey());
+  $auth_check = hash_hmac('md5', $data_confirm, $YOUR_AUTH_CODE);
 
   $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
+    sleep(rand(1, 100));
     header("Status: 401 Unauthorized");
     exit("Auth failed");
   }
