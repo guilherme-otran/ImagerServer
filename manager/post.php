@@ -2,15 +2,11 @@
 try {
   require('initializer.php');
   require('auth.php');
-  require('slugger.php');
-  require('resizer.php');
   require('post_validator.php');
+  require('resizer.php');
 
   $collection = utf8_decode($_POST['collection']);
   $album      = utf8_decode($_POST['album']);
-
-  $collection = removeAcentos($collection, '-');
-  $album      = removeAcentos($album, '-');
 
   $collection = substr($collection, 0, 20);
   $album      = substr($album, 0, 20);
@@ -44,8 +40,7 @@ try {
     'album'       => utf8_encode($album),
     'file_id'     => utf8_encode($file_id),
     'image_sizes' => $files,
-    'URIs'        => $uris,
-    'key'         => $_SESSION['key']
+    'URIs'        => $uris
   );
 
   if (sizeof($files) > 0) {

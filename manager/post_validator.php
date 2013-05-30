@@ -60,22 +60,30 @@
   $file = array_pop($_FILES);
   if (!$file) {
     header("Status: 400 Bad Request");
-    exit;
+    exit("Must have a file.");
   }
 
   if (!is_uploaded_file($file['tmp_name'])) {
     header("Status: 400 Bad Request");
-    exit;
+    exit("File upload failed.");
   }
 
   // The file name should have a extension
   $file_id = utf8_decode($file['name']);
-  $file_id = removeAcentos($file_id);
-  // Remove .jpg or other extension.
-  $file_id = substr($file_id, 0, -4);
-  if (strlen($file_id) < 1) {
+  echo $file_id;
+  $i = stripos($file_id, '.');
+  if ($i === false) {
     header("Status: 400 Bad Request");
-    exit;
+    exit("File must have an extension");
+  }
+
+  // Remove .jpg or other extension.
+  $file_id = substr($file_id, 0, $i);
+  unset($i);
+
+  if ( preg_match("/[^a-z0-9\-]/i", $file_id) || (strlen($file_id) < 1) ) {
+    header("Status: 400 Bad Request");
+    exit("File name contains illegal chars.");
   }
 
 ?>

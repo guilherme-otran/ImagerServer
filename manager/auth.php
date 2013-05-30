@@ -21,24 +21,26 @@
     $auth = '';
   }
 
-  if (isset($file) && $file) {
-    $data_confirm  = md5_file($file['tmp_name']);
-    $data_confirm .= sha1_file($file['tmp_name']);
+  $files = $_FILES;
+  $file  = array_pop($files);
+  unset($files);
 
-    $data_confirm .= http_build_query($file['name']);
-  } else {
-    $data_confirm = '';
+
+  if ($file && is_uploaded_file($file['tmp_name'])) {
+    $posted['file_md5']  = md5_file($file['tmp_name']);
+    $posted['file_sha1'] = sha1_file($file['tmp_name']);
+    $posted['file_name'] = ($file['name']);
   }
+  unset($file);
 
   //$data_confirm .= json_encode($posted);
-  $data_confirm .= http_build_query($posted);
-  echo($data_confirm);
+  $data_confirm = http_build_query($posted);
   $auth_check = hash_hmac('md5', $data_confirm, $YOUR_AUTH_CODE);
 
   $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
-    sleep(rand(1, 100));
+    usleep(rand(1, 1000));
     header("Status: 401 Unauthorized");
     exit("Auth failed");
   }
