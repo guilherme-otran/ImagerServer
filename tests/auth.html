@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Post tester</title>
+    <title>Auth tester</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script type="text/javascript" src="2.0.0-crypto-md5.js"></script>
     <script type="text/javascript" src="2.0.0-hmac-min.js"></script>
@@ -11,7 +11,7 @@
           var YOUR_AUTH_CODE = $('#auth_code').val();
           var ROUNDED = Math.round(Date.now() / (2 * 60 * 1000)) * 2 * 60;
           var KEY = Crypto.MD5(YOUR_AUTH_CODE + ROUNDED);
-          var valor = Crypto.HMAC(Crypto.MD5, '[]', KEY);
+          var valor = Crypto.HMAC(Crypto.MD5, '', KEY);
           $('#auth').attr('value', valor);
         }
 

@@ -34,13 +34,14 @@
   }
 
   if (isset($file) && $file) {
-    $data_confirm = md5_file($file['tmp_name']);
+    $data_confirm = md5_file($file['tmp_name']) . '&';
   } else {
     $data_confirm = '';
   }
 
-  $data_confirm .= json_encode($posted);
-
+  //$data_confirm .= json_encode($posted);
+  $data_confirm .= http_build_query($posted);
+  echo($data_confirm);
   $auth_check = hash_hmac('md5', $data_confirm, getKey());
 
   $authenticated = ("$auth_check" === "$auth");

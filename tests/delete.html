@@ -2,33 +2,28 @@
   <head>
     <title>Delete tester</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="md5-min.js"></script>
+    <script type="text/javascript" src="2.0.0-crypto-md5.js"></script>
+    <script type="text/javascript" src="2.0.0-hmac-min.js"></script>
     <script>
-      token = "";
-
-      function process_auth() {
-        var YOUR_AUTH_CODE = $('#auth_code').attr("value");
-
-        $('#auth').attr('value', hex_md5(token + YOUR_AUTH_CODE));
-
-      }
-
       jQuery(function($){
-        $.ajax({
-          url: "../manager/auth.php",
-          processData: false,
 
-          success: function(data) {
-            token = data;
-            $('#formsubmit').removeAttr("disabled");
-            $(".auth-wait").remove();
-          }
-        });
+        function process_auth() {
+          var YOUR_AUTH_CODE = $('#auth_code').val();
+          var ROUNDED        = Math.round(Date.now() / (2 * 60 * 1000)) * 2 * 60;
+          var KEY            = Crypto.MD5(YOUR_AUTH_CODE + ROUNDED);
+
+          data = $("form#form").serialize();
+          var valor = Crypto.HMAC(Crypto.MD5, data, KEY);
+
+          auth_elm = $("<input type='hidden' name='auth' id='auth' value='" + valor + "'/>");
+          $("form#form").append(auth_elm);
+        }
 
         $('form#form').on('submit', function(){
           process_auth();
         });
-      });
+
+      })
 
     </script>
   </head>
@@ -39,7 +34,6 @@
     YOUR_AUTH_CODE: <input type='text' id='auth_code' value=''/>
     <form id='form' enctype='multipart/form-data' method='post' action='../manager/delete.php'>
 
-      <input type='hidden' name='auth' id='auth' value=''/>
 
       Collection:<input type='text' name='collection' />
       Album:<input type='text' name='album' />
