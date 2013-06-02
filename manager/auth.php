@@ -39,8 +39,8 @@
   $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
-    usleep(rand(1, 1000));
-    header("Status: 401 Unauthorized");
+    usleep(rand(1, 2000));
+    header("HTTP/1.1 401 Unauthorized", true, 401);
     exit("Auth failed.");
   }
 ?>

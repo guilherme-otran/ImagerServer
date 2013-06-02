@@ -1,6 +1,6 @@
 <?php
   if (!defined('INITIALIZED')) {
-    header("Status: 404 Not Found");
+    header("HTTP/1.1 404 Not Found", true, 404);
     exit;
   }
 

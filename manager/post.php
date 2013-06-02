@@ -12,8 +12,6 @@ try {
   $album      = substr($album, 0, 20);
 
   $destination = "$collection/$album/$file_id/";
-  $files       = array();
-  $uris        = array();
 
   if (! is_dir($GLOBALS['ImagePath'] . $destination)) {
     if (!mkdir($GLOBALS['ImagePath'] . $destination, 0777, true)) {
@@ -24,37 +22,38 @@ try {
     $new = false;
   }
 
+  $accepted_sizes = array();
+  $uris           = array();
+
   foreach ($sizes as $key => $size) {
     $filename = $key . '.jpg';
     $savepath = $GLOBALS['ImagePath'] . $destination . $filename;
     $saved    = ResizeImage($file['tmp_name'], $savepath, $size);
     if ($saved) {
-      $files[$key] = $filename;
+      array_push($accepted_sizes, $key);
       $uri         = $GLOBALS['ImageBaseURI'] . $destination . $filename;
       $uris[$key]  = $uri;
     }
   }
 
   $result = array(
-    'collection'  => utf8_encode($collection),
-    'album'       => utf8_encode($album),
-    'file_id'     => utf8_encode($file_id),
-    'image_sizes' => $files,
-    'URIs'        => $uris
+    'collection'     => utf8_encode($collection),
+    'album'          => utf8_encode($album),
+    'file_id'        => utf8_encode($file_id),
+    'accepted_sizes' => $accepted_sizes,
+    'URIs'           => $uris
   );
 
-  if (sizeof($files) > 0) {
+  if (sizeof($accepted_sizes) > 0) {
     if ($new) {
-      header("Status: 201 Created");
-    } else {
-      header("Status: 200 OK");
+      header("HTTP/1.1 201 Created", true, 201);
     }
     echo json_encode($result);
   } else {
-    header("Status: 400 Bad Request");
+    header("HTTP/1.1 400 Bad Request", true, 400);
   }
 
 } catch (Exception $e) {
-  header("Status: 500 Internal Server Error");
+  header("HTTP/1.1 500 Internal Server Error", true, 500);
 }
 ?>

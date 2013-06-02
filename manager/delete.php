@@ -8,14 +8,14 @@
   $to_delete = $_POST['collection'] . '/' . $_POST['album'] . '/' . $_POST['file_id'];
 
   if (!is_dir($GLOBALS['ImagePath'] . $to_delete)) {
-    header("Status: 404 Not Found");
+    header("HTTP/1.1 404 Not Found", true, 404);
     die("Cannot find the file.");
   }
 
   if (!recursive_rmdir($GLOBALS['ImagePath'] . $to_delete)) {
-    header("Status: 500 Internal Server Error");
+    header("HTTP/1.1 500 Internal Server Error", true, 500);
     die("");
   }
 
-  header("Status: 204 No Content");
+  header("HTTP/1.1 204 No Content", true, 204);
 ?>
