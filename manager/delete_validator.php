@@ -13,7 +13,8 @@
     (strlen($_POST['collection']) > 0) &&
     (!preg_match("/[^a-z0-9]/i", $_POST['collection']))
   )) {
-    header("HTTP/1.1 400 Bad Request", true, 400);
+
+    header("Status: 422 Unprocessable Entity");
     die("Invalid collection");
   }
 
@@ -25,7 +26,8 @@
     (strlen($_POST['album']) > 0) &&
     (!preg_match("/[^a-z0-9]/i", $_POST['album']))
   )) {
-    header("HTTP/1.1 400 Bad Request", true, 400);
+
+    header("Status: 422 Unprocessable Entity");
     die("Invalid album");
   }
 
@@ -35,7 +37,7 @@
     (strlen($_POST['file_id']) > 0) &&
     (!preg_match("/[^a-z0-9\-]/i", $_POST['file_id']))
   )) {
-    header("HTTP/1.1 400 Bad Request", true, 400);
+    header("Status: 422 Unprocessable Entity");
     die("Invalid file_id.");
   }
 

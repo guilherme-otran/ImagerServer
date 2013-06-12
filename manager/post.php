@@ -50,7 +50,7 @@ try {
     }
     echo json_encode($result);
   } else {
-    header("HTTP/1.1 400 Bad Request", true, 400);
+    header("Status: 422 Unprocessable Entity");
   }
 
 } catch (Exception $e) {
