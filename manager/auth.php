@@ -25,11 +25,9 @@
   $file  = array_pop($files);
   unset($files);
 
-
   if ($file && is_uploaded_file($file['tmp_name'])) {
     $posted['file_md5']  = md5_file($file['tmp_name']);
     $posted['file_sha1'] = sha1_file($file['tmp_name']);
-    $posted['file_name'] = ($file['name']);
   }
   unset($file);
 

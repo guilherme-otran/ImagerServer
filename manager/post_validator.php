@@ -68,19 +68,17 @@
     exit("File upload failed.");
   }
 
-  // The file name should have a extension
-  $file_id = utf8_decode($file['name']);
-  $i = stripos($file_id, '.');
-  if ($i === false) {
+  if (! (
+    isset($_POST['file_id']) &&
+    is_string($_POST['file_id']) &&
+    (strlen($_POST['file_id']) > 1)
+  )) {
     header("Status: 422 Unprocessable Entity");
-    exit("File must have an extension");
+    die("Invalid file name");
   }
 
-  // Remove .jpg or other extension.
-  $file_id = substr($file_id, 0, $i);
-  unset($i);
-
-  if ( preg_match("/[^a-z0-9\-]/i", $file_id) || (strlen($file_id) < 1) ) {
+  $file_id = utf8_decode($_POST['file_id']);
+  if ( preg_match("/[^a-z0-9\-]/i", $file_id) ) {
     header("Status: 422 Unprocessable Entity");
     exit("File name contains illegal chars.");
   }
