@@ -10,6 +10,10 @@ function ResizeImage($source, $destination, $size)
 
   $source = imagecreatefromstring(file_get_contents($source));
 
+  if ( !$source ) {
+    throw new Exception("Image is not valid.", 1);
+  }
+
   if ( $size === 'original' ) {
 
     if (! imagejpeg($source, $destination, 50) ) {

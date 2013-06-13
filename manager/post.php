@@ -28,7 +28,14 @@ try {
   foreach ($sizes as $key => $size) {
     $filename = $key . '.jpg';
     $savepath = $GLOBALS['ImagePath'] . $destination . $filename;
-    $saved    = ResizeImage($file['tmp_name'], $savepath, $size);
+
+    try {
+      $saved = ResizeImage($file['tmp_name'], $savepath, $size);
+    } catch (Exception $e) {
+      header("Status: 422 Unprocessable Entity");
+      exit($e->getMessage());
+    }
+
     if ($saved) {
       array_push($accepted_sizes, $key);
       $uri         = $GLOBALS['ImageBaseURI'] . $destination . $filename;
