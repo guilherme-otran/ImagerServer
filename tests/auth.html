@@ -9,7 +9,8 @@
 
         function process_auth() {
           var YOUR_AUTH_CODE = $('#auth_code').val();
-          var valor = Crypto.HMAC(Crypto.MD5, '', YOUR_AUTH_CODE);
+          var options = $('#options').val();
+          var valor = Crypto.HMAC(Crypto.MD5, options, YOUR_AUTH_CODE);
           $('#auth').attr('value', valor);
         }
 
@@ -26,6 +27,7 @@
 
     <form id='form' enctype='multipart/form-data' method='post' action='../manager/auth.php'>
 
+      <input type='hidden' name='options' id='options' value='{}'/>
       <input type='hidden' name='auth' id='auth' value=''/>
       <input type='submit' />
     </form>

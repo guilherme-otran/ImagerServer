@@ -10,12 +10,35 @@
         function process_auth() {
           var YOUR_AUTH_CODE = $('#auth_code').val();
 
-          var data = $("form#form").serialize();
-          var valor = Crypto.HMAC(Crypto.MD5, data, YOUR_AUTH_CODE);
+          var data = JSON.stringify({
+            sizes: {
+              original: "original",
+              home: { width: "100" },
+              small: { width: "100", height: "70" },
+              gallery: { height: "200" }
+            },
 
-          auth_elm = $("<input type='hidden' name='auth' id='auth' value='" + valor + "'/>");
-          $("form#form .file").remove();
+            collection: $("#collection").val(),
+            album: $("#album").val(),
+            file_id: $("#file_id").val(),
+            file_md5: $("#file_md5").val(),
+            file_sha1: $("#file_sha1").val(),
+          });
+
+          var auth = Crypto.HMAC(Crypto.MD5, data, YOUR_AUTH_CODE);
+
+          var auth_elm = $("<input type='hidden' name='auth' id='auth' />");
+          auth_elm.val(auth);
+
+          var options_elm = $("<input type='hidden' name='options' id='options_json' />");
+          options_elm.val(data);
+
+          var file_elm = $("#file_select");
+
+          $("form#form input").remove();
           $("form#form").append(auth_elm);
+          $("form#form").append(options_elm);
+          $("form#form").append(file_elm);
         }
 
         $('form#form').on('submit', function(){
@@ -37,27 +60,14 @@
 
       <input type='file' id='file_select' name='file' />  <br />
 
-      Collection: <input type='text' name='collection' /> <br />
-      Album:      <input type='text' name='album' />      <br />
+      Collection: <input type='text' name='collection' id="collection" /> <br />
+      Album:      <input type='text' name='album'      id="album" />      <br />
 
-      <!-- width = 100px -->
-      <input type='hidden' name='sizes[home][width]'  value='100' />
-
-      <!-- must be in 100x70 -->
-      <input type='hidden' name='sizes[small][width]'  value='100' />
-      <input type='hidden' name='sizes[small][heigth]' value='70' />
-
-      <!-- heigth = 200 -->
-      <input type='hidden' name='sizes[gallery][height]' value='200' />
-
-      <!-- no resize -->
-      <input type='hidden' name='sizes[original]' value='original' />
-
-      File name:      <input type='text' name='file_id'                  value='test'/><br />
+      File name:      <input type='text' name='file_id'                id="file_id"   value='test'/><br />
       <!-- MD5 of test.png -->
-      File MD5:       <input type='text' name='file_md5'  class='file'   value='e5d3d46db883ef065b8f352e37c399ff'/><br />
+      File MD5:       <input type='text' name='file_md5'  class='file' id="file_md5"  value='e5d3d46db883ef065b8f352e37c399ff'/><br />
       <!-- SHA1 of test.png -->
-      File SHA1:      <input type='text' name='file_sha1' class='file'   value='713f9abb1034c81f2e8cc0bc6f62a6f63ec9c98e'/><br />
+      File SHA1:      <input type='text' name='file_sha1' class='file' id="file_sha1" value='713f9abb1034c81f2e8cc0bc6f62a6f63ec9c98e'/><br />
 
       <input type='submit' id='formsubmit'/>
     </form>

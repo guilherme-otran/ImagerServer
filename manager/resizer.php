@@ -34,15 +34,15 @@ function ResizeImage($source, $destination, $size)
   $w = 0;
   $h = 0;
 
-  if ( isset($size['width']) ) {
-    $w = $size['width'];
+  if ( isset($size->width) ) {
+    $w = $size->width;
     $h = ($w * $y) / $x;
   }
 
-  if ( isset($size['height']) ) {
+  if ( isset($size->height) ) {
 
-    if ( (!$w) || ($h > $size['height']) ) {
-      $h = $size['height'];
+    if ( (!$w) || ($h > $size->height) ) {
+      $h = $size->height;
       $w = ($x * $h) / $y;
     }
 

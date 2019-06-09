@@ -5,8 +5,8 @@ try {
   require('post_validator.php');
   require('resizer.php');
 
-  $collection = utf8_decode($_POST['collection']);
-  $album      = utf8_decode($_POST['album']);
+  $collection = utf8_decode($options->{'collection'});
+  $album      = utf8_decode($options->{'album'});
 
   $collection = substr($collection, 0, 20);
   $album      = substr($album, 0, 20);

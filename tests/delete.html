@@ -10,11 +10,23 @@
         function process_auth() {
           var YOUR_AUTH_CODE = $('#auth_code').val();
 
-          data = $("form#form").serialize();
-          var valor = Crypto.HMAC(Crypto.MD5, data, YOUR_AUTH_CODE);
+          data = JSON.stringify({
+            collection: $("#collection").val(),
+            album: $("#album").val(),
+            file_id: $("#file_id").val()
+          });
 
-          auth_elm = $("<input type='hidden' name='auth' id='auth' value='" + valor + "'/>");
+          var auth = Crypto.HMAC(Crypto.MD5, data, YOUR_AUTH_CODE);
+
+          var auth_elm = $("<input type='hidden' name='auth' id='auth' />");
+          auth_elm.val(auth);
+
+          var options_elm = $("<input type='hidden' name='options' id='options' />");
+          options_elm.val(data);
+
+          $("form#form input").remove();
           $("form#form").append(auth_elm);
+          $("form#form").append(options_elm);
         }
 
         $('form#form').on('submit', function(){
@@ -33,9 +45,9 @@
     <form id='form' enctype='multipart/form-data' method='post' action='../manager/delete.php'>
 
 
-      Collection:<input type='text' name='collection' />
-      Album:<input type='text' name='album' />
-      File ID:<input type='text' name='file_id' />
+      Collection:<input type='text' name='collection' id="collection" />
+      Album:<input type='text' name='album' id="album" />
+      File ID:<input type='text' name='file_id' id="file_id" />
 
       <input type='submit' />
     </form>

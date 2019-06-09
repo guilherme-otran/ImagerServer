@@ -10,35 +10,45 @@
   // DO NOT USE A BLANK VALUE!
   // Random one yourself or use: https://www.random.org/
   //
-  $YOUR_AUTH_CODE = '';
+  $YOUR_AUTH_CODE = 'ABCDE';
 
-  $posted = $_POST;
-
-  if ( isset($posted['auth']) && is_string($posted['auth']) ) {
-    $auth = $posted['auth'];
-    unset($posted['auth']);
+  if ( isset($_POST['auth']) && is_string($_POST['auth']) ) {
+    $auth = $_POST['auth'];
   } else {
     $auth = '';
   }
+
+  $options_json = $_POST['options'];
+  $auth_check = hash_hmac('md5', $options_json, $YOUR_AUTH_CODE);
+  $authenticated = ("$auth_check" === "$auth");
 
   $files = $_FILES;
   $file  = array_pop($files);
   unset($files);
 
   if ($file && is_uploaded_file($file['tmp_name'])) {
-    $posted['file_md5']  = md5_file($file['tmp_name']);
-    $posted['file_sha1'] = sha1_file($file['tmp_name']);
+    $file_md5  = md5_file($file['tmp_name']);
+    $options_file_md5 = $options->{'file_md5'};
+
+    $authenticated = $authenticated && ("$file_md5" === "$options_file_md5");
+
+    $file_sha1 = sha1_file($file['tmp_name']);
+    $options_file_sha1 = $options->{'file_sha1'};
+
+    $authenticated = $authenticated && ("$file_sha1" === "$options_file_sha1");
+
+    unset($file_md5);
+    unset($options_file_md5);
+    unset($file_sha1);
+    unset($options_file_sha1);
   }
+
   unset($file);
-
-  $data_confirm = http_build_query($posted);
-  $auth_check   = hash_hmac('md5', $data_confirm, $YOUR_AUTH_CODE);
-
-  $authenticated = ("$auth_check" === "$auth");
 
   if (!$authenticated) {
     usleep(rand(1, 2000));
     header("HTTP/1.1 401 Unauthorized", true, 401);
+    print("auth check: $auth_check");
+    print("auth: $auth");
     exit("Auth failed.");
   }
-?>

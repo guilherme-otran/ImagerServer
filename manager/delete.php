@@ -5,7 +5,7 @@
   require('deleter.php');
 
   // This post values are safe here, due to delete_validator
-  $to_delete = $_POST['collection'] . '/' . $_POST['album'] . '/' . $_POST['file_id'];
+  $to_delete = $options->{'collection'} . '/' . $options->{'album'} . '/' . $options->{'file_id'};
 
   if (!is_dir($GLOBALS['ImagePath'] . $to_delete)) {
     header("HTTP/1.1 404 Not Found", true, 404);
@@ -18,4 +18,3 @@
   }
 
   header("HTTP/1.1 204 No Content", true, 204);
-?>

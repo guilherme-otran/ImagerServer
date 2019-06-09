@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['APP_ROOT']   = '/home/user/projects/imager_server/';
+$GLOBALS['APP_ROOT']   = '/home/guilherme/projects/imagerserver/';
 $GLOBALS['IMAGES_DIR'] = 'images/';
 
  // Uncomment for production
@@ -32,4 +32,5 @@ $GLOBALS['ImagePath'] = $GLOBALS['APP_ROOT'] . $GLOBALS['IMAGES_DIR'];
 $GLOBALS['ImageBaseURI']  = 'http://' . $_SERVER["HTTP_HOST"] . $GLOBALS['APP_URL'] . $GLOBALS['IMAGES_DIR'];
 
 define('INITIALIZED', true);
-?>
+
+$options = json_decode($_POST['options']);
