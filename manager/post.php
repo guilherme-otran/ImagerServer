@@ -32,7 +32,7 @@ try {
     try {
       $saved = ResizeImage($file['tmp_name'], $savepath, $size);
     } catch (Exception $e) {
-      header("Status: 422 Unprocessable Entity");
+      header("HTTP/1.1 422 Unprocessable Entity", true, 422);
       exit($e->getMessage());
     }
 
@@ -57,10 +57,9 @@ try {
     }
     echo json_encode($result);
   } else {
-    header("Status: 422 Unprocessable Entity");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
   }
 
 } catch (Exception $e) {
   header("HTTP/1.1 500 Internal Server Error", true, 500);
 }
-?>

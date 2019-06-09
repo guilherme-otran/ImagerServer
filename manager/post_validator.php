@@ -13,8 +13,8 @@
     (strlen($options->{'collection'}) > 0) &&
     (!preg_match("/[^a-z0-9]/i", $options->{'collection'}))
   )) {
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid collection");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid collection");
   }
 
   // Album must be present and be a string
@@ -25,32 +25,32 @@
     (strlen($options->{'album'}) > 0) &&
     (!preg_match("/[^a-z0-9]/i", $options->{'album'}))
   )) {
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid album");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid album");
   }
 
   if (! (
     isset($options->{'sizes'}) &&
     is_object($options->{'sizes'})
   )) {
-    header("Status: 422 Unprocessable Entity");
-    die("Sizes must be an object");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Sizes must be an object");
   }
 
   foreach ($options->{'sizes'} as $key => $value) {
     if (!is_string($key)) {
-      header("Status: 422 Unprocessable Entity");
-      die("Invalid key $key for sizes");
+      header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+      exit("Invalid key $key for sizes");
     }
 
     if (strlen($key) < 2) {
-      header("Status: 422 Unprocessable Entity");
-      die("Invalid key $key. Must be grater than 2");
+      header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+      exit("Invalid key $key. Must be grater than 2");
     }
 
     if(preg_match("/[^a-z0-9]/i", $key)) {
-      header("Status: 422 Unprocessable Entity");
-      die("Invalid key $key for sizes");
+      header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+      exit("Invalid key $key for sizes");
     }
   }
 
@@ -59,12 +59,12 @@
   // Must have a file uploaded
   $file = array_pop($_FILES);
   if (!$file) {
-    header("Status: 422 Unprocessable Entity");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
     exit("Must have a file.");
   }
 
   if (!is_uploaded_file($file['tmp_name'])) {
-    header("Status: 422 Unprocessable Entity");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
     exit("File upload failed.");
   }
 
@@ -73,14 +73,12 @@
     is_string($options->{'file_id'}) &&
     (strlen($options->{'file_id'}) > 1)
   )) {
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid file name");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid file name");
   }
 
   $file_id = utf8_decode($options->{'file_id'});
   if ( preg_match("/[^a-z0-9\-]/i", $file_id) ) {
-    header("Status: 422 Unprocessable Entity");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
     exit("File name contains illegal chars.");
   }
-
-?>

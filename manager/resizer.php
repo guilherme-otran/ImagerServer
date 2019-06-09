@@ -63,4 +63,3 @@ function ResizeImage($source, $destination, $size)
 
   return false;
 }
-?>

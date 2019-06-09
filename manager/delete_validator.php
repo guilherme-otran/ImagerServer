@@ -14,8 +14,8 @@
     (!preg_match("/[^a-z0-9]/i", $options->{'collection'}))
   )) {
 
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid collection");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid collection");
   }
 
   // Album must be present and be a string
@@ -27,8 +27,8 @@
     (!preg_match("/[^a-z0-9]/i", $options->{'album'}))
   )) {
 
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid album");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid album");
   }
 
   if (! (
@@ -37,6 +37,6 @@
     (strlen($options->{'file_id'}) > 0) &&
     (!preg_match("/[^a-z0-9\-]/i", $options->{'file_id'}))
   )) {
-    header("Status: 422 Unprocessable Entity");
-    die("Invalid file_id.");
+    header("HTTP/1.1 422 Unprocessable Entity", true, 422);
+    exit("Invalid file_id.");
   }
